@@ -40,7 +40,7 @@ FileInstall("partyaccept.png", "partyaccept.png", 1)
 FileInstall("partyinvite.png", "partyinvite.png", 1)
 FileInstall("leaveparty.png", "leaveparty.png", 1)
 FileInstall("JustAsk.ini", "JustAsk.ini", 0)
-Global $hwnd=WinWait("MapleStory")
+Global $hwnd = WinWait("MapleStory")
 Global $hwndpos = WinGetPos("MapleStory")
 Global $command, $nocd, $IsOnChair = 1, $iX, $iY
 Global $iLeft = $hwndpos[0]
@@ -48,8 +48,6 @@ Global $iTop = $hwndpos[1]
 Global $iRight = $hwndpos[2] + $hwndpos[0]
 Global $iBottom = $hwndpos[3] + $hwndpos[1]
 Global $hs = IniRead("JustAsk.ini", "keys", "hs", "{space}")
-Global $quit = IniRead("JustAsk.ini", "keys", "quit", "^{escape}")
-Global $sit = IniRead("JustAsk.ini", "keys", "sit", "t")
 Global $door = IniRead("JustAsk.ini", "keys", "door", "`")
 Global $bless = IniRead("JustAsk.ini", "keys", "bless", "d")
 Global $shell = IniRead("JustAsk.ini", "keys", "shell", "{ins}")
@@ -59,8 +57,27 @@ Global $revive = IniRead("JustAsk.ini", "keys", "revive", "v")
 Global $genesis = IniRead("JustAsk.ini", "keys", "genesis", "c")
 Global $dispel = IniRead("JustAsk.ini", "keys", "dispel", "{end}")
 Global $fountain = IniRead("JustAsk.ini", "keys", "fountain", "{pgup}")
+Global $sit = IniRead("JustAsk.ini", "keys", "sit", "t")
 Global $partychat = IniRead("JustAsk.ini", "keys", "PartyChat", "3")
 Global $resetkey = IniRead("JustAsk.ini", "keys", "FixDetection", "{f7}")
+Global $quit = IniRead("JustAsk.ini", "keys", "quit", "^{escape}")
+Global $Logging = IniRead("JustAsk.ini", "Settings", "Logging", True)
+Global $commands = _
+		[ _
+		["HolySymbol", $hs], _
+		["Door", $door], _
+		["Bless", $bless], _
+		["Shell", $shell], _
+		["MapleWarrior", $mw], _
+		["Heal", $heal], _
+		["Revive", $revive], _
+		["Genesis", $genesis], _
+		["Dispel", $dispel], _
+		["Fountain", $fountain], _
+		["PartyInvite", "partyinvite"], _
+		["LeaveParty", "leaveparty"], _
+		["Commands", "commands"], _
+		["Fix100", "reset"]]
 If $sit = "off" Then $IsOnChair = 0
 HotKeySet($quit, "_exit")
 HotKeySet($resetkey, "GetMapleWin")
@@ -94,21 +111,28 @@ Func _FindImage($sImgPath, $command) ;the function that searches
 	_GDIPlus_ImageDispose($hImage)
 	_GDIPlus_Shutdown()
 	If $iRet = 1 Then
+		If $Logging = True Then
+			For $i = 0 To UBound($commands) - 1
+				If $commands[$i][1] = $command Then $currentcommand = $i
+			Next
+			$Log = IniRead(@ScriptDir & "\Log.txt", "Logging", $commands[$currentcommand][0], 0)
+			IniWrite(@ScriptDir & "\Log.txt", "Logging", $commands[$currentcommand][0], $Log + 1)
+		EndIf
 		If $command = "reset" Then
 			Reset()
-			Return
+			Return 1
 		EndIf
 		If $command = "commands" Then
 			commands()
-			Return
+			Return 1
 		EndIf
 		If $command = "leaveparty" Then
 			leaveparty()
-			Return
+			Return 1
 		EndIf
 		If $command = "partyinvite" Then
 			partyinvite()
-			Return
+			Return 1
 		EndIf
 		If Not $command = "" Then
 			FixFocus()
@@ -123,6 +147,7 @@ Func _FindImage($sImgPath, $command) ;the function that searches
 		Else
 			Sleep(Random(4500, 5000))
 		EndIf
+		Return 1
 	EndIf
 EndFunc   ;==>_FindImage
 Func FixFocus()
@@ -236,9 +261,7 @@ Func partyinvite()
 	_GDIPlus_ImageDispose($hImage)
 	_GDIPlus_Shutdown()
 	If $iRet = 1 Then
-		ConsoleWrite("Clicked!"&@CRLF)
-		;ControlClick("MapleStory","","","Left",1,$iX,$iY);doesnt work for some reason
-		mouseClick("Left",$iX,$iY,1,0)
+		MouseClick("Left", $iX, $iY, 1, 0)
 	EndIf
 	Sleep(1000)
 EndFunc   ;==>partyinvite
