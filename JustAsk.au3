@@ -1,12 +1,12 @@
 #RequireAdmin
 #Region ;**** Directives created by AutoIt3Wrapper_GUI ****
-#AutoIt3Wrapper_Icon=Icon.ico
+#AutoIt3Wrapper_Icon=Includes\Icon.ico
 #AutoIt3Wrapper_Compression=4
 #AutoIt3Wrapper_UseUpx=y
 #AutoIt3Wrapper_Res_Fileversion=1.0.0.0
 #EndRegion ;**** Directives created by AutoIt3Wrapper_GUI ****
 #include-once
-#include "ImageSearch.au3"
+#include "Includes\ImageSearch.au3"
 #include <GDIPlus.au3>
 #include <Misc.au3>
 ProcessSetPriority(@ScriptName, 3)
@@ -23,24 +23,24 @@ Opt("SendKeydownDelay", 30)
 Opt("WinTitleMatchMode", 3)
 DirCreate(@TempDir & "\BetaLeaf Software\JustAsk\")
 FileChangeDir(@TempDir & "\BetaLeaf Software\JustAsk")
-FileInstall("ImageSearchDLL.dll", @TempDir & "\BetaLeaf Software\JustAsk\ImageSearchDLL.dll", 1)
-FileInstall("ImageSearch.au3", @TempDir & "\BetaLeaf Software\JustAsk\ImageSearch.au3", 1)
-FileInstall("bless.png", @TempDir & "\BetaLeaf Software\JustAsk\bless.png", 1)
-FileInstall("commands.png", @TempDir & "\BetaLeaf Software\JustAsk\commands.png", 1)
-FileInstall("dispel.png", @TempDir & "\BetaLeaf Software\JustAsk\dispel.png", 1)
-FileInstall("door.png", @TempDir & "\BetaLeaf Software\JustAsk\door.png", 1)
-FileInstall("Fix100.png", @TempDir & "\BetaLeaf Software\JustAsk\Fix100.png", 1)
-FileInstall("fountain.png", @TempDir & "\BetaLeaf Software\JustAsk\fountain.png", 1)
-FileInstall("genesis.png", @TempDir & "\BetaLeaf Software\JustAsk\genesis.png", 1)
-FileInstall("heal.png", @TempDir & "\BetaLeaf Software\JustAsk\heal.png", 1)
-FileInstall("hs.png", @TempDir & "\BetaLeaf Software\JustAsk\hs.png", 1)
-FileInstall("maplewarrior.png", @TempDir & "\BetaLeaf Software\JustAsk\maplewarrior.png", 1)
-FileInstall("mw.png", @TempDir & "\BetaLeaf Software\JustAsk\mw.png", 1)
-FileInstall("revive.png", @TempDir & "\BetaLeaf Software\JustAsk\revive.png", 1)
-FileInstall("shell.png", @TempDir & "\BetaLeaf Software\JustAsk\shell.png", 1)
-FileInstall("partyaccept.png", @TempDir & "\BetaLeaf Software\JustAsk\partyaccept.png", 1)
-FileInstall("partyinvite.png", @TempDir & "\BetaLeaf Software\JustAsk\partyinvite.png", 1)
-FileInstall("leaveparty.png", @TempDir & "\BetaLeaf Software\JustAsk\leaveparty.png", 1)
+FileInstall("Includes\ImageSearchDLL.dll", @TempDir & "\BetaLeaf Software\JustAsk\ImageSearchDLL.dll", 1)
+FileInstall("Includes\ImageSearch.au3", @TempDir & "\BetaLeaf Software\JustAsk\ImageSearch.au3", 1)
+FileInstall("Images\bless.png", @TempDir & "\BetaLeaf Software\JustAsk\bless.png", 1)
+FileInstall("Images\commands.png", @TempDir & "\BetaLeaf Software\JustAsk\commands.png", 1)
+FileInstall("Images\dispel.png", @TempDir & "\BetaLeaf Software\JustAsk\dispel.png", 1)
+FileInstall("Images\door.png", @TempDir & "\BetaLeaf Software\JustAsk\door.png", 1)
+FileInstall("Images\Fix100.png", @TempDir & "\BetaLeaf Software\JustAsk\Fix100.png", 1)
+FileInstall("Images\fountain.png", @TempDir & "\BetaLeaf Software\JustAsk\fountain.png", 1)
+FileInstall("Images\genesis.png", @TempDir & "\BetaLeaf Software\JustAsk\genesis.png", 1)
+FileInstall("Images\heal.png", @TempDir & "\BetaLeaf Software\JustAsk\heal.png", 1)
+FileInstall("Images\hs.png", @TempDir & "\BetaLeaf Software\JustAsk\hs.png", 1)
+FileInstall("Images\maplewarrior.png", @TempDir & "\BetaLeaf Software\JustAsk\maplewarrior.png", 1)
+FileInstall("Images\mw.png", @TempDir & "\BetaLeaf Software\JustAsk\mw.png", 1)
+FileInstall("Images\revive.png", @TempDir & "\BetaLeaf Software\JustAsk\revive.png", 1)
+FileInstall("Images\shell.png", @TempDir & "\BetaLeaf Software\JustAsk\shell.png", 1)
+FileInstall("Images\partyaccept.png", @TempDir & "\BetaLeaf Software\JustAsk\partyaccept.png", 1)
+FileInstall("Images\partyinvite.png", @TempDir & "\BetaLeaf Software\JustAsk\partyinvite.png", 1)
+FileInstall("Images\leaveparty.png", @TempDir & "\BetaLeaf Software\JustAsk\leaveparty.png", 1)
 FileInstall("JustAsk.ini", @ScriptDir&"\JustAsk.ini", 0)
 Global $hwnd = WinWait("MapleStory")
 Global $hwndpos = WinGetPos("MapleStory")
