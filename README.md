@@ -38,6 +38,10 @@ All Chat Commands: (**Party Management Commands**)
   
   This program searches for command in chat bubbles above players head. If it finds a command it uses that command. The chat bubble must be unobscured.  
   
+**Logging**  
+
+  This program is capable of logging it usage when ```Logging = True``` is set in [JustAsk.ini](https://github.com/BetaLeaf/MapleStory-JustAsk/blob/master/JustAsk.ini). When ```True```, JustAsk.log is created in the same directory as the executable. You can open this log file with notepad and see which commands are being used and how often.
+  
 **How to configure the INI File:**  
 
 [keys]  
