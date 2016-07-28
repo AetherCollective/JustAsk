@@ -263,6 +263,7 @@ Func partyinvite()
 	_GDIPlus_ImageDispose($hImage)
 	_GDIPlus_Shutdown()
 	If $iRet = 1 Then
+		WinActivate("MapleStory")
 		MouseClick("Left", $iX, $iY, 1, 0)
 	EndIf
 	Sleep(1000)
