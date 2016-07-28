@@ -117,8 +117,8 @@ Func _FindImage($sImgPath, $command) ;the function that searches
 			For $i = 0 To UBound($commands) - 1
 				If $commands[$i][1] = $command Then $currentcommand = $i
 			Next
-			$Log = IniRead(@ScriptDir & "\Log.txt", "Logging", $commands[$currentcommand][0], 0)
-			IniWrite(@ScriptDir & "\Log.txt", "Logging", $commands[$currentcommand][0], $Log + 1)
+			$Log = IniRead(@ScriptDir & "\JustAsk.log", "Logging", $commands[$currentcommand][0], 0)
+			IniWrite(@ScriptDir & "\JustAsk.log", "Logging", $commands[$currentcommand][0], $Log + 1)
 		EndIf
 		If $command = "reset" Then
 			Reset()
