@@ -41,29 +41,29 @@ FileInstall("Images\shell.png", @TempDir & "\BetaLeaf Software\JustAsk\shell.png
 FileInstall("Images\partyaccept.png", @TempDir & "\BetaLeaf Software\JustAsk\partyaccept.png", 1)
 FileInstall("Images\partyinvite.png", @TempDir & "\BetaLeaf Software\JustAsk\partyinvite.png", 1)
 FileInstall("Images\leaveparty.png", @TempDir & "\BetaLeaf Software\JustAsk\leaveparty.png", 1)
-FileInstall("JustAsk.ini", @ScriptDir&"\JustAsk.ini", 0)
+FileInstall("JustAsk.ini", @ScriptDir & "\JustAsk.ini", 0)
 Global $hwnd = WinWait("MapleStory")
 Global $hwndpos = WinGetPos("MapleStory")
-Global $command, $nocd, $IsOnChair = 1, $iX, $iY
+Global $nocd, $IsOnChair = 1, $iX, $iY, $iTimer, $sTimerCommand
 Global $iLeft = $hwndpos[0]
 Global $iTop = $hwndpos[1]
 Global $iRight = $hwndpos[2] + $hwndpos[0]
 Global $iBottom = $hwndpos[3] + $hwndpos[1]
-Global $hs = IniRead(@ScriptDir&"\JustAsk.ini", "keys", "hs", "{space}")
-Global $door = IniRead(@ScriptDir&"\JustAsk.ini", "keys", "door", "`")
-Global $bless = IniRead(@ScriptDir&"\JustAsk.ini", "keys", "bless", "d")
-Global $shell = IniRead(@ScriptDir&"\JustAsk.ini", "keys", "shell", "{ins}")
-Global $mw = IniRead(@ScriptDir&"\JustAsk.ini", "keys", "maplewarrior", "o")
-Global $heal = IniRead(@ScriptDir&"\JustAsk.ini", "keys", "Heal", "{pgdn}")
-Global $revive = IniRead(@ScriptDir&"\JustAsk.ini", "keys", "revive", "v")
-Global $genesis = IniRead(@ScriptDir&"\JustAsk.ini", "keys", "genesis", "c")
-Global $dispel = IniRead(@ScriptDir&"\JustAsk.ini", "keys", "dispel", "{end}")
-Global $fountain = IniRead(@ScriptDir&"\JustAsk.ini", "keys", "fountain", "{pgup}")
-Global $sit = IniRead(@ScriptDir&"\JustAsk.ini", "keys", "sit", "t")
-Global $partychat = IniRead(@ScriptDir&"\JustAsk.ini", "keys", "PartyChat", "3")
-Global $resetkey = IniRead(@ScriptDir&"\JustAsk.ini", "keys", "FixDetection", "{f7}")
-Global $quit = IniRead(@ScriptDir&"\JustAsk.ini", "keys", "quit", "^{escape}")
-Global $Logging = IniRead(@ScriptDir&"\JustAsk.ini", "Settings", "Logging", True)
+Global $hs = IniRead(@ScriptDir & "\JustAsk.ini", "keys", "hs", "{space}")
+Global $door = IniRead(@ScriptDir & "\JustAsk.ini", "keys", "door", "`")
+Global $bless = IniRead(@ScriptDir & "\JustAsk.ini", "keys", "bless", "d")
+Global $shell = IniRead(@ScriptDir & "\JustAsk.ini", "keys", "shell", "{ins}")
+Global $mw = IniRead(@ScriptDir & "\JustAsk.ini", "keys", "maplewarrior", "o")
+Global $heal = IniRead(@ScriptDir & "\JustAsk.ini", "keys", "Heal", "{pgdn}")
+Global $revive = IniRead(@ScriptDir & "\JustAsk.ini", "keys", "revive", "v")
+Global $genesis = IniRead(@ScriptDir & "\JustAsk.ini", "keys", "genesis", "c")
+Global $dispel = IniRead(@ScriptDir & "\JustAsk.ini", "keys", "dispel", "{end}")
+Global $fountain = IniRead(@ScriptDir & "\JustAsk.ini", "keys", "fountain", "{pgup}")
+Global $sit = IniRead(@ScriptDir & "\JustAsk.ini", "keys", "sit", "t")
+Global $partychat = IniRead(@ScriptDir & "\JustAsk.ini", "keys", "PartyChat", "3")
+Global $resetkey = IniRead(@ScriptDir & "\JustAsk.ini", "keys", "FixDetection", "{f7}")
+Global $quit = IniRead(@ScriptDir & "\JustAsk.ini", "keys", "quit", "^{escape}")
+Global $Logging = IniRead(@ScriptDir & "\JustAsk.ini", "Settings", "Logging", True)
 Global $commands = _
 		[ _
 		["HolySymbol", $hs], _
@@ -120,35 +120,42 @@ Func _FindImage($sImgPath, $command) ;the function that searches
 			$Log = IniRead(@ScriptDir & "\JustAsk.log", "Logging", $commands[$currentcommand][0], 0)
 			IniWrite(@ScriptDir & "\JustAsk.log", "Logging", $commands[$currentcommand][0], $Log + 1)
 		EndIf
+		If $sTimerCommand = $command Then
+			If TimerDiff($iTimer) < 5500 Then Return 2
+		EndIf
 		If $command = "reset" Then
-			Reset()
+			Reset($command)
+			$iTimer=TimerInit()
+			$sTimerCommand=$command
 			Return 1
 		EndIf
 		If $command = "commands" Then
 			commands()
+			$iTimer=TimerInit()
+			$sTimerCommand=$command
 			Return 1
 		EndIf
 		If $command = "leaveparty" Then
 			leaveparty()
+			$iTimer=TimerInit()
+			$sTimerCommand=$command
 			Return 1
 		EndIf
 		If $command = "partyinvite" Then
 			partyinvite()
+			$iTimer=TimerInit()
+			$sTimerCommand=$command
 			Return 1
 		EndIf
 		If Not $command = "" Then
 			FixFocus()
 			If $IsOnChair = 1 Then UnmountChair()
 			ControlSend("MapleStory", "", "", $command)
-			If $IsOnChair = 1 Then mountChair()
+			If $IsOnChair = 1 Then mountChair($command)
 		EndIf
-		If $nocd = 1 Then
-			Sleep(Random(0, 200))
-		ElseIf $IsOnChair = 1 Then
-			Sleep(Random(1500, 1800))
-		Else
-			Sleep(Random(4500, 5000))
-		EndIf
+		;If $IsOnChair = 1 Then Sleep(Random(1500, 1800))
+		$iTimer = TimerInit()
+		$sTimerCommand = $command
 		Return 1
 	EndIf
 EndFunc   ;==>_FindImage
@@ -168,18 +175,18 @@ Func UnmountChair()
 	ControlSend("MapleStory", "", "", "{lalt up}")
 	Sleep(Random(1000, 1200))
 EndFunc   ;==>UnmountChair
-Func mountChair()
+Func mountChair($command)
 	If Not $IsOnChair = 1 Then Return
 	Sleep(Random(1000, 1200))
 	If $command = $heal Then Sleep(4500)
 	If $command = $genesis Then Sleep(4500)
 	ControlSend("MapleStory", "", "", $sit)
-	;_SetIsRunningState("no")
+	Sleep(Random(1000, 1200))
 EndFunc   ;==>mountChair
 Func _exit()
 	Exit
 EndFunc   ;==>_exit
-Func Reset()
+Func Reset($command)
 	FixFocus()
 	If $IsOnChair = 1 Then UnmountChair()
 	ControlSend("MapleStory", "", "", "{ins}")
@@ -190,8 +197,7 @@ Func Reset()
 	Sleep(5000)
 	ControlSend("MapleStory", "", "", "{up}")
 	Sleep(4500)
-	If $IsOnChair = 1 Then mountChair()
-	;_SetIsRunningState("no")
+	If $IsOnChair = 1 Then mountChair($command)
 EndFunc   ;==>Reset
 Func GetMapleWin()
 	$hwndpos = WinGetPos("MapleStory")
