@@ -1,15 +1,16 @@
 **Instructions:**  
 
-  - Extract into a separate folder and run the exe. The first run will install the necessary files in the current directory. Set the INI file, save, and then relaunch the exe.  
+  - Extract into a separate folder and run the exe. The first run will install the necessary files and setup this program.
+  - You will be prompted to set your keybinds. If you wish to reset these keybinds, delete the JustAsk.ini file.
 
 **How to use:**  
 
   - Just have anyone in PARTY chat say "hs" or "bless" (without quotes) and your character will use those skills.  
-  - Maplestory must be in Windowed mode or this will not work.  
   - You can say "commands" for an entire list of commands.  
   - The command "fix100" will fix buffs not being applied. This is to counteract the 100 attack limitation.  
   - The commands "partyinvite" and "leaveparty" can be used to regain control of a dead party. 
   - These Party Management Commands only work in all chat with no quote rings and must be sent in lowercase. 
+  - You muse have ClearType enabled on Windows XP machines. [Learn More](https://support.microsoft.com/en-us/kb/306527#bookmark-2)  
 
 **Command List:**  
   
@@ -41,17 +42,19 @@ All Chat Commands: (**Party Management Commands**)
 **Logging**  
 
   This program is capable of logging it usage when ```Logging = True``` is set in [JustAsk.ini](https://github.com/BetaLeaf/MapleStory-JustAsk/blob/master/JustAsk.ini). When ```True```, JustAsk.log is created in the same directory as the executable. You can open this log file with notepad and see which commands are being used and how often.
-  
+<a name="INIFILE"></a>  
 **How to configure the INI File:**  
 
 [keys]  
-```hs = {space}```  
-```quit = +{esc}```  
+```hs = {space}```   
 ```sit = t```  
 
-  - In this Example, we can see that quit is set to Shift+Escape. When you press this key, Just Ask will terminate itself.  
-  - You can also see Holy symbol is set to Space.  
-  - If you set sit=off then the sit function will not be used.  
+  - In this Example, we can see that Holy symbol is set to Space.  
+  - If you set ```sit = off``` then the sit function will not be used.  
+  
+**Keys:**
+
+  If using the program to configure your keybinds, do not surround your key with {}.
 
 <table border="1">
 <tbody>
