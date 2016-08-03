@@ -9,6 +9,86 @@
 #include "Includes\ImageSearch.au3"
 #include <GDIPlus.au3>
 #include <Misc.au3>
+#include <ButtonConstants.au3>
+#include <EditConstants.au3>
+#include <GUIConstantsEx.au3>
+#include <StaticConstants.au3>
+#include <WindowsConstants.au3>
+If Not FileExists(@ScriptDir & "\JustAsk.ini") Then
+	Global $commandslist = [ _
+			["Holy Symbol", "hs"], _
+			["Mystic Door", "door"], _
+			["Bless", "bless"], _
+			["Holy Magic Shell", "shell"], _
+			["Maple Warrior", "maplewarrior"], _
+			["Heal", "heal"], _
+			["Revive", "revive"], _
+			["Genesis", "genesis"], _
+			["Dispel", "dispel"], _
+			["Fountain", "fountain"], _
+			["Heaven's Door", "heavensdoor"], _
+			["Party Chat", "PartyChat"], _
+			["Sit", "sit"]]
+	ShellExecute("https://betaleaf.net/justask.html#INIFILE")
+	OnAutoItExitRegister("_ExitSetup")
+	Sleep(3000)
+	For $i = 1 To UBound($commandslist) - 1
+		#Region ### START Koda GUI section ### Form=
+		$JustAsk = GUICreate("JustAsk", 261, 40, -1, -1, BitOR($GUI_SS_DEFAULT_GUI, $DS_SETFOREGROUND))
+		$Label = GUICtrlCreateLabel("Please set the key to be pressed for " & $commandslist[$i][0] & ".", 4, 0, 255, 17)
+		$Input = GUICtrlCreateInput("", 145, 17, 37, 17)
+		GUICtrlSetFont(-1, 7, 400, 0, "MS Sans Serif")
+		$CTRL = GUICtrlCreateCheckbox("CTRL", 4, 16, 49, 17)
+		$ALT = GUICtrlCreateCheckbox("ALT", 55, 16, 41, 17)
+		$SHIFT = GUICtrlCreateCheckbox("SHIFT", 96, 16, 49, 17)
+		$Ok = GUICtrlCreateButton("Ok", 180, 16, 76, 19)
+		GUISetState(@SW_SHOW)
+		#EndRegion ### END Koda GUI section ###
+		$key = ""
+		While 1
+			$nMsg = GUIGetMsg()
+			Switch $nMsg
+				Case $GUI_EVENT_CLOSE
+					Exit
+				Case $Ok
+					GUISetState(@SW_HIDE)
+					If GUICtrlRead($Input) Then
+						If GUICtrlRead($CTRL) = $GUI_CHECKED Then $key &= "^"
+						If GUICtrlRead($ALT) = $GUI_CHECKED Then $key &= "!"
+						If GUICtrlRead($SHIFT) = $GUI_CHECKED Then $key &= "+"
+						$key &= "{" & GUICtrlRead($Input) & "}"
+					ElseIf GUICtrlRead($CTRL) = $GUI_CHECKED Then
+						$key &= "{lctrl}"
+					ElseIf GUICtrlRead($ALT) = $GUI_CHECKED Then
+						$key &= "{lalt}"
+					ElseIf GUICtrlRead($SHIFT) = $GUI_CHECKED Then
+						$key &= "{lshift}"
+					EndIf
+					If GUICtrlRead($Input) = "off" Then $key = "off"
+					If IniWrite(@ScriptDir & "\JustAsk.ini", "keys", $commandslist[$i][1], $key) <> 1 Then MsgBox($MB_ICONERROR, "JustAsk", "Could not write to INI file.")
+					ExitLoop
+			EndSwitch
+		WEnd
+	Next
+	If MsgBox($MB_ICONQUESTION+$MB_YESNO, "JustAsk", "Do you want to enable logging?") = $IDYES Then
+		If IniWrite(@ScriptDir & "\JustAsk.ini", "Settings", "Logging", True) <> 1 Then MsgBox($MB_ICONERROR, "JustAsk", "Could not write to INI file.")
+	EndIf
+	Global $hs = IniRead(@ScriptDir & "\JustAsk.ini", "keys", "hs", "{space}")
+	Global $door = IniRead(@ScriptDir & "\JustAsk.ini", "keys", "door", "`")
+	Global $bless = IniRead(@ScriptDir & "\JustAsk.ini", "keys", "bless", "d")
+	Global $shell = IniRead(@ScriptDir & "\JustAsk.ini", "keys", "shell", "{ins}")
+	Global $mw = IniRead(@ScriptDir & "\JustAsk.ini", "keys", "maplewarrior", "o")
+	Global $heal = IniRead(@ScriptDir & "\JustAsk.ini", "keys", "Heal", "{pgdn}")
+	Global $revive = IniRead(@ScriptDir & "\JustAsk.ini", "keys", "revive", "v")
+	Global $genesis = IniRead(@ScriptDir & "\JustAsk.ini", "keys", "genesis", "c")
+	Global $dispel = IniRead(@ScriptDir & "\JustAsk.ini", "keys", "dispel", "{end}")
+	Global $fountain = IniRead(@ScriptDir & "\JustAsk.ini", "keys", "fountain", "{pgup}")
+	Global $heaven = IniRead(@ScriptDir & "\JustAsk.ini", "keys", "heavensdoor", "a")
+	Global $sit = IniRead(@ScriptDir & "\JustAsk.ini", "keys", "sit", "t")
+	Global $partychat = IniRead(@ScriptDir & "\JustAsk.ini", "keys", "PartyChat", "3")
+	Global $Logging = IniRead(@ScriptDir & "\JustAsk.ini", "Settings", "Logging", True)
+	OnAutoItExitUnRegister("_ExitSetup")
+EndIf
 ProcessSetPriority(@ScriptName, 3)
 ProcessSetPriority("AutoIt3.exe", 3)
 _Singleton("JustAsk")
@@ -42,7 +122,6 @@ FileInstall("Images\heaven.png", @TempDir & "\BetaLeaf Software\JustAsk\heaven.p
 FileInstall("Images\partyaccept.png", @TempDir & "\BetaLeaf Software\JustAsk\partyaccept.png", 1)
 FileInstall("Images\partyinvite.png", @TempDir & "\BetaLeaf Software\JustAsk\partyinvite.png", 1)
 FileInstall("Images\leaveparty.png", @TempDir & "\BetaLeaf Software\JustAsk\leaveparty.png", 1)
-
 FileInstall("Images\bless_xp.png", @TempDir & "\BetaLeaf Software\JustAsk\bless_xp.png", 1)
 FileInstall("Images\commands_xp.png", @TempDir & "\BetaLeaf Software\JustAsk\commands_xp.png", 1)
 FileInstall("Images\dispel_xp.png", @TempDir & "\BetaLeaf Software\JustAsk\dispel_xp.png", 1)
@@ -60,7 +139,6 @@ FileInstall("Images\heaven_xp.png", @TempDir & "\BetaLeaf Software\JustAsk\heave
 FileInstall("Images\partyaccept_xp.png", @TempDir & "\BetaLeaf Software\JustAsk\partyaccept_xp.png", 1)
 FileInstall("Images\partyinvite_xp.png", @TempDir & "\BetaLeaf Software\JustAsk\partyinvite_xp.png", 1)
 FileInstall("Images\leaveparty_xp.png", @TempDir & "\BetaLeaf Software\JustAsk\leaveparty_xp.png", 1)
-FileInstall("JustAsk.ini", @ScriptDir & "\JustAsk.ini", 0)
 If @OSVersion = "WIN_XP" Then
 	Global $ifxp = "_xp"
 Else
@@ -110,6 +188,7 @@ Global $commands = _
 If $sit = "off" Then $IsOnChair = 0
 HotKeySet($quit, "_exit")
 HotKeySet($resetkey, "GetMapleWin")
+AdlibRegister("GetMapleWin", 15 * 1000)
 WinActivate("MapleStory")
 idle()
 Func idle()
@@ -322,3 +401,6 @@ Func leaveparty()
 	Sleep(5500)
 	ClipPut($clipstorage)
 EndFunc   ;==>leaveparty
+Func _ExitSetup()
+	FileDelete(@ScriptDir & "\JustAsk.ini")
+EndFunc   ;==>_ExitSetup
