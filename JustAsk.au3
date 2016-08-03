@@ -38,10 +38,35 @@ FileInstall("Images\maplewarrior.png", @TempDir & "\BetaLeaf Software\JustAsk\ma
 FileInstall("Images\mw.png", @TempDir & "\BetaLeaf Software\JustAsk\mw.png", 1)
 FileInstall("Images\revive.png", @TempDir & "\BetaLeaf Software\JustAsk\revive.png", 1)
 FileInstall("Images\shell.png", @TempDir & "\BetaLeaf Software\JustAsk\shell.png", 1)
+FileInstall("Images\heaven.png", @TempDir & "\BetaLeaf Software\JustAsk\heaven.png", 1)
 FileInstall("Images\partyaccept.png", @TempDir & "\BetaLeaf Software\JustAsk\partyaccept.png", 1)
 FileInstall("Images\partyinvite.png", @TempDir & "\BetaLeaf Software\JustAsk\partyinvite.png", 1)
 FileInstall("Images\leaveparty.png", @TempDir & "\BetaLeaf Software\JustAsk\leaveparty.png", 1)
+
+FileInstall("Images\bless_xp.png", @TempDir & "\BetaLeaf Software\JustAsk\bless_xp.png", 1)
+FileInstall("Images\commands_xp.png", @TempDir & "\BetaLeaf Software\JustAsk\commands_xp.png", 1)
+FileInstall("Images\dispel_xp.png", @TempDir & "\BetaLeaf Software\JustAsk\dispel_xp.png", 1)
+FileInstall("Images\door_xp.png", @TempDir & "\BetaLeaf Software\JustAsk\door_xp.png", 1)
+FileInstall("Images\Fix100_xp.png", @TempDir & "\BetaLeaf Software\JustAsk\Fix100_xp.png", 1)
+FileInstall("Images\fountain_xp.png", @TempDir & "\BetaLeaf Software\JustAsk\fountain_xp.png", 1)
+FileInstall("Images\genesis_xp.png", @TempDir & "\BetaLeaf Software\JustAsk\genesis_xp.png", 1)
+FileInstall("Images\heal_xp.png", @TempDir & "\BetaLeaf Software\JustAsk\heal_xp.png", 1)
+FileInstall("Images\hs_xp.png", @TempDir & "\BetaLeaf Software\JustAsk\hs_xp.png", 1)
+FileInstall("Images\maplewarrior_xp.png", @TempDir & "\BetaLeaf Software\JustAsk\maplewarrior_xp.png", 1)
+FileInstall("Images\mw_xp.png", @TempDir & "\BetaLeaf Software\JustAsk\mw_xp.png", 1)
+FileInstall("Images\revive_xp.png", @TempDir & "\BetaLeaf Software\JustAsk\revive_xp.png", 1)
+FileInstall("Images\shell_xp.png", @TempDir & "\BetaLeaf Software\JustAsk\shell_xp.png", 1)
+FileInstall("Images\heaven_xp.png", @TempDir & "\BetaLeaf Software\JustAsk\heaven_xp.png", 1)
+FileInstall("Images\partyaccept_xp.png", @TempDir & "\BetaLeaf Software\JustAsk\partyaccept_xp.png", 1)
+FileInstall("Images\partyinvite_xp.png", @TempDir & "\BetaLeaf Software\JustAsk\partyinvite_xp.png", 1)
+FileInstall("Images\leaveparty_xp.png", @TempDir & "\BetaLeaf Software\JustAsk\leaveparty_xp.png", 1)
 FileInstall("JustAsk.ini", @ScriptDir & "\JustAsk.ini", 0)
+If @OSVersion = "WIN_XP" Then
+	Global $ifxp = "_xp"
+Else
+	Global $ifxp = ""
+EndIf
+IniWrite("log.txt", "Log", "File", @TempDir & "\BetaLeaf Software\JustAsk\hs" & $ifxp & ".png")
 Global $hwnd = WinWait("MapleStory")
 Global $hwndpos = WinGetPos("MapleStory")
 Global $nocd, $IsOnChair = 1, $iX, $iY, $iTimer, $sTimerCommand
@@ -59,6 +84,7 @@ Global $revive = IniRead(@ScriptDir & "\JustAsk.ini", "keys", "revive", "v")
 Global $genesis = IniRead(@ScriptDir & "\JustAsk.ini", "keys", "genesis", "c")
 Global $dispel = IniRead(@ScriptDir & "\JustAsk.ini", "keys", "dispel", "{end}")
 Global $fountain = IniRead(@ScriptDir & "\JustAsk.ini", "keys", "fountain", "{pgup}")
+Global $heaven = IniRead(@ScriptDir & "\JustAsk.ini", "keys", "heavensdoor", "a")
 Global $sit = IniRead(@ScriptDir & "\JustAsk.ini", "keys", "sit", "t")
 Global $partychat = IniRead(@ScriptDir & "\JustAsk.ini", "keys", "PartyChat", "3")
 Global $resetkey = IniRead(@ScriptDir & "\JustAsk.ini", "keys", "FixDetection", "{f7}")
@@ -76,6 +102,7 @@ Global $commands = _
 		["Genesis", $genesis], _
 		["Dispel", $dispel], _
 		["Fountain", $fountain], _
+		["Heaven", $heaven], _
 		["PartyInvite", "partyinvite"], _
 		["LeaveParty", "leaveparty"], _
 		["Commands", "commands"], _
@@ -87,24 +114,26 @@ WinActivate("MapleStory")
 idle()
 Func idle()
 	While 1
-		_FindImage(@TempDir & "\BetaLeaf Software\JustAsk\hs.png", $hs)
-		_FindImage(@TempDir & "\BetaLeaf Software\JustAsk\bless.png", $bless)
-		_FindImage(@TempDir & "\BetaLeaf Software\JustAsk\door.png", $door)
-		_FindImage(@TempDir & "\BetaLeaf Software\JustAsk\heal.png", $heal)
-		_FindImage(@TempDir & "\BetaLeaf Software\JustAsk\shell.png", $shell)
-		_FindImage(@TempDir & "\BetaLeaf Software\JustAsk\mw.png", $mw)
-		_FindImage(@TempDir & "\BetaLeaf Software\JustAsk\maplewarrior.png", $mw)
-		_FindImage(@TempDir & "\BetaLeaf Software\JustAsk\revive.png", $revive)
-		_FindImage(@TempDir & "\BetaLeaf Software\JustAsk\genesis.png", $genesis)
-		_FindImage(@TempDir & "\BetaLeaf Software\JustAsk\fountain.png", $fountain)
-		_FindImage(@TempDir & "\BetaLeaf Software\JustAsk\dispel.png", $dispel)
-		_FindImage(@TempDir & "\BetaLeaf Software\JustAsk\fix100.png", "reset")
-		_FindImage(@TempDir & "\BetaLeaf Software\JustAsk\commands.png", "commands")
-		_FindImage(@TempDir & "\BetaLeaf Software\JustAsk\leaveparty.png", "leaveparty")
-		_FindImage(@TempDir & "\BetaLeaf Software\JustAsk\partyinvite.png", "partyinvite")
+		_FindImage(@TempDir & "\BetaLeaf Software\JustAsk\hs" & $ifxp & ".png", $hs)
+		_FindImage(@TempDir & "\BetaLeaf Software\JustAsk\bless" & $ifxp & ".png", $bless)
+		_FindImage(@TempDir & "\BetaLeaf Software\JustAsk\door" & $ifxp & ".png", $door)
+		_FindImage(@TempDir & "\BetaLeaf Software\JustAsk\heal" & $ifxp & ".png", $heal)
+		_FindImage(@TempDir & "\BetaLeaf Software\JustAsk\shell" & $ifxp & ".png", $shell)
+		_FindImage(@TempDir & "\BetaLeaf Software\JustAsk\mw" & $ifxp & ".png", $mw)
+		_FindImage(@TempDir & "\BetaLeaf Software\JustAsk\maplewarrior" & $ifxp & ".png", $mw)
+		_FindImage(@TempDir & "\BetaLeaf Software\JustAsk\revive" & $ifxp & ".png", $revive)
+		_FindImage(@TempDir & "\BetaLeaf Software\JustAsk\genesis" & $ifxp & ".png", $genesis)
+		_FindImage(@TempDir & "\BetaLeaf Software\JustAsk\fountain" & $ifxp & ".png", $fountain)
+		_FindImage(@TempDir & "\BetaLeaf Software\JustAsk\dispel" & $ifxp & ".png", $dispel)
+		_FindImage(@TempDir & "\BetaLeaf Software\JustAsk\heaven" & $ifxp & ".png", $heaven)
+		_FindImage(@TempDir & "\BetaLeaf Software\JustAsk\fix100" & $ifxp & ".png", "reset")
+		_FindImage(@TempDir & "\BetaLeaf Software\JustAsk\commands" & $ifxp & ".png", "commands")
+		_FindImage(@TempDir & "\BetaLeaf Software\JustAsk\leaveparty" & $ifxp & ".png", "leaveparty")
+		_FindImage(@TempDir & "\BetaLeaf Software\JustAsk\partyinvite" & $ifxp & ".png", "partyinvite")
 	WEnd
 EndFunc   ;==>idle
 Func _FindImage($sImgPath, $command) ;the function that searches
+	Sleep(1000 / @DesktopRefresh * 2)
 	_GDIPlus_Startup()
 	Local $hImage = _GDIPlus_ImageLoadFromFile($sImgPath)
 	Local $hHBmp = _GDIPlus_BitmapCreateHBITMAPFromBitmap($hImage)
@@ -125,26 +154,26 @@ Func _FindImage($sImgPath, $command) ;the function that searches
 		EndIf
 		If $command = "reset" Then
 			Reset($command)
-			$iTimer=TimerInit()
-			$sTimerCommand=$command
+			$iTimer = TimerInit()
+			$sTimerCommand = $command
 			Return 1
 		EndIf
 		If $command = "commands" Then
 			commands()
-			$iTimer=TimerInit()
-			$sTimerCommand=$command
+			$iTimer = TimerInit()
+			$sTimerCommand = $command
 			Return 1
 		EndIf
 		If $command = "leaveparty" Then
 			leaveparty()
-			$iTimer=TimerInit()
-			$sTimerCommand=$command
+			$iTimer = TimerInit()
+			$sTimerCommand = $command
 			Return 1
 		EndIf
 		If $command = "partyinvite" Then
 			partyinvite()
-			$iTimer=TimerInit()
-			$sTimerCommand=$command
+			$iTimer = TimerInit()
+			$sTimerCommand = $command
 			Return 1
 		EndIf
 		If Not $command = "" Then
@@ -194,9 +223,9 @@ Func Reset($command)
 	ControlSend("MapleStory", "", "", "{`}")
 	Sleep(1500)
 	ControlSend("MapleStory", "", "", "{up}")
-	Sleep(5000)
+	Sleep(10000)
 	ControlSend("MapleStory", "", "", "{up}")
-	Sleep(4500)
+	Sleep(10000)
 	If $IsOnChair = 1 Then mountChair($command)
 EndFunc   ;==>Reset
 Func GetMapleWin()
@@ -211,7 +240,7 @@ Func commands()
 	ControlSend("MapleStory", "", "", $partychat)
 	Sleep(500)
 	Local $clipstorage = ClipGet()
-	ClipPut("Party Commands: hs, bless, dispel, door, fountain, heal,")
+	ClipPut("Party Commands: hs, bless, dispel, door, fountain, heal, heaven")
 	ControlSend("MapleStory", "", "", "+{ins}")
 	Sleep(100)
 	ControlSend("MapleStory", "", "", "{enter}")
@@ -251,12 +280,12 @@ Func commands()
 	Sleep(100)
 	ControlSend("MapleStory", "", "", "{enter}")
 	Sleep(900)
-	ClipPut('Party Management Commands only work in all chat with no quote rings &')
+	ClipPut('Party Management Commands only work in all chat with no quote')
 	ControlSend("MapleStory", "", "", "+{ins}")
 	Sleep(100)
 	ControlSend("MapleStory", "", "", "{enter}")
 	Sleep(900)
-	ClipPut("must be sent in lowercase. Used to regain control of a dead party.")
+	ClipPut("rings & must be in all lowercase. Used to gain control of a dead party")
 	ControlSend("MapleStory", "", "", "+{ins}")
 	Sleep(100)
 	ControlSend("MapleStory", "", "", "{enter}")
