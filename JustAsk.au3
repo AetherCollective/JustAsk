@@ -308,6 +308,7 @@ Func Reset($command)
 	If $IsOnChair = 1 Then mountChair($command)
 EndFunc   ;==>Reset
 Func GetMapleWin()
+	WinWait("MapleStory")
 	$hwndpos = WinGetPos("MapleStory")
 	$iLeft = $hwndpos[0]
 	$iTop = $hwndpos[1]
