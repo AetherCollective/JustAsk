@@ -14,6 +14,7 @@
 #include <GUIConstantsEx.au3>
 #include <StaticConstants.au3>
 #include <WindowsConstants.au3>
+#include <ScreenCapture.au3>
 If Not FileExists(@ScriptDir & "\JustAsk.ini") Then
 	Global $commandslist = [ _
 			["Holy Symbol", "hs"], _
@@ -193,30 +194,35 @@ WinActivate("MapleStory")
 idle()
 Func idle()
 	While 1
-		_FindImage(@TempDir & "\BetaLeaf Software\JustAsk\hs" & $ifxp & ".png", $hs)
-		_FindImage(@TempDir & "\BetaLeaf Software\JustAsk\bless" & $ifxp & ".png", $bless)
-		_FindImage(@TempDir & "\BetaLeaf Software\JustAsk\door" & $ifxp & ".png", $door)
-		_FindImage(@TempDir & "\BetaLeaf Software\JustAsk\heal" & $ifxp & ".png", $heal)
-		_FindImage(@TempDir & "\BetaLeaf Software\JustAsk\shell" & $ifxp & ".png", $shell)
-		_FindImage(@TempDir & "\BetaLeaf Software\JustAsk\mw" & $ifxp & ".png", $mw)
-		_FindImage(@TempDir & "\BetaLeaf Software\JustAsk\maplewarrior" & $ifxp & ".png", $mw)
-		_FindImage(@TempDir & "\BetaLeaf Software\JustAsk\revive" & $ifxp & ".png", $revive)
-		_FindImage(@TempDir & "\BetaLeaf Software\JustAsk\genesis" & $ifxp & ".png", $genesis)
-		_FindImage(@TempDir & "\BetaLeaf Software\JustAsk\fountain" & $ifxp & ".png", $fountain)
-		_FindImage(@TempDir & "\BetaLeaf Software\JustAsk\dispel" & $ifxp & ".png", $dispel)
-		_FindImage(@TempDir & "\BetaLeaf Software\JustAsk\heaven" & $ifxp & ".png", $heaven)
-		_FindImage(@TempDir & "\BetaLeaf Software\JustAsk\fix100" & $ifxp & ".png", "reset")
-		_FindImage(@TempDir & "\BetaLeaf Software\JustAsk\commands" & $ifxp & ".png", "commands")
-		_FindImage(@TempDir & "\BetaLeaf Software\JustAsk\leaveparty" & $ifxp & ".png", "leaveparty")
-		_FindImage(@TempDir & "\BetaLeaf Software\JustAsk\partyinvite" & $ifxp & ".png", "partyinvite")
+		$MapleHBMP= _ScreenCapture_CaptureWnd(@TempDir & "\BetaLeaf Software\JustAsk\scantmp.png",$hwnd)
+		$MapleHImage=_GDIPlus_BitmapCreateHBITMAPFromBitmap($MapleHBMP)
+		_FindImage(@TempDir & "\BetaLeaf Software\JustAsk\hs" & $ifxp & ".png", $hs,$MapleHImage)
+		_FindImage(@TempDir & "\BetaLeaf Software\JustAsk\bless" & $ifxp & ".png", $bless,$MapleHImage)
+		_FindImage(@TempDir & "\BetaLeaf Software\JustAsk\door" & $ifxp & ".png", $door,$MapleHImage)
+		_FindImage(@TempDir & "\BetaLeaf Software\JustAsk\heal" & $ifxp & ".png", $heal,$MapleHImage)
+		_FindImage(@TempDir & "\BetaLeaf Software\JustAsk\shell" & $ifxp & ".png", $shell,$MapleHImage)
+		_FindImage(@TempDir & "\BetaLeaf Software\JustAsk\mw" & $ifxp & ".png", $mw,$MapleHImage)
+		_FindImage(@TempDir & "\BetaLeaf Software\JustAsk\maplewarrior" & $ifxp & ".png", $mw,$MapleHImage)
+		_FindImage(@TempDir & "\BetaLeaf Software\JustAsk\revive" & $ifxp & ".png", $revive,$MapleHImage)
+		_FindImage(@TempDir & "\BetaLeaf Software\JustAsk\genesis" & $ifxp & ".png", $genesis,$MapleHImage)
+		_FindImage(@TempDir & "\BetaLeaf Software\JustAsk\fountain" & $ifxp & ".png", $fountain,$MapleHImage)
+		_FindImage(@TempDir & "\BetaLeaf Software\JustAsk\dispel" & $ifxp & ".png", $dispel,$MapleHImage)
+		_FindImage(@TempDir & "\BetaLeaf Software\JustAsk\heaven" & $ifxp & ".png", $heaven,$MapleHImage)
+		_FindImage(@TempDir & "\BetaLeaf Software\JustAsk\fix100" & $ifxp & ".png", "reset",$MapleHImage)
+		_FindImage(@TempDir & "\BetaLeaf Software\JustAsk\commands" & $ifxp & ".png", "commands",$MapleHImage)
+		_FindImage(@TempDir & "\BetaLeaf Software\JustAsk\leaveparty" & $ifxp & ".png", "leaveparty",$MapleHImage)
+		_FindImage(@TempDir & "\BetaLeaf Software\JustAsk\partyinvite" & $ifxp & ".png", "partyinvite",$MapleHImage)
+		_WinAPI_DeleteObject($MapleHBMP)
+		_GDIPlus_ImageDispose($MapleHImage)
+		FileDelete(@TempDir & "\BetaLeaf Software\JustAsk\scantmp.png")
 	WEnd
 EndFunc   ;==>idle
-Func _FindImage($sImgPath, $command) ;the function that searches
+Func _FindImage($sImgPath, $command,$MapleHImage) ;the function that searches
 	Sleep(1000 / @DesktopRefresh * 2)
 	_GDIPlus_Startup()
 	Local $hImage = _GDIPlus_ImageLoadFromFile($sImgPath)
 	Local $hHBmp = _GDIPlus_BitmapCreateHBITMAPFromBitmap($hImage)
-	Local $iRet = _ImageSearchArea($hHBmp, 1, $iLeft, $iTop, $iRight, $iBottom, $iX, $iY, 5, 0)
+	Local $iRet = _ImageSearchArea($hHBmp, 1, $iLeft, $iTop, $iRight, $iBottom, $iX, $iY, 5, $MapleHImage)
 	_WinAPI_DeleteObject($hHBmp)
 	_GDIPlus_ImageDispose($hImage)
 	_GDIPlus_Shutdown()
@@ -227,6 +233,7 @@ Func _FindImage($sImgPath, $command) ;the function that searches
 			Next
 			$Log = IniRead(@ScriptDir & "\JustAsk.log", "Logging", $commands[$currentcommand][0], 0)
 			IniWrite(@ScriptDir & "\JustAsk.log", "Logging", $commands[$currentcommand][0], $Log + 1)
+			FileCopy(@TempDir & "\BetaLeaf Software\JustAsk\scantmp.png",@TempDir & "\BetaLeaf Software\JustAsk\scanfound.png")
 		EndIf
 		If $sTimerCommand = $command Then
 			If TimerDiff($iTimer) < 5500 Then Return 2
@@ -250,7 +257,7 @@ Func _FindImage($sImgPath, $command) ;the function that searches
 			Return 1
 		EndIf
 		If $command = "partyinvite" Then
-			partyinvite()
+			partyinvite($MapleHImage)
 			$iTimer = TimerInit()
 			$sTimerCommand = $command
 			Return 1
@@ -297,9 +304,9 @@ EndFunc   ;==>_exit
 Func Reset($command)
 	FixFocus()
 	If $IsOnChair = 1 Then UnmountChair()
-	ControlSend("MapleStory", "", "", "{ins}")
+	ControlSend("MapleStory", "", "", $shell)
 	Sleep(1500)
-	ControlSend("MapleStory", "", "", "{`}")
+	ControlSend("MapleStory", "", "", $door)
 	Sleep(1500)
 	ControlSend("MapleStory", "", "", "{up}")
 	Sleep(10000)
@@ -308,7 +315,7 @@ Func Reset($command)
 	If $IsOnChair = 1 Then mountChair($command)
 EndFunc   ;==>Reset
 Func GetMapleWin()
-	WinWait("MapleStory")
+	$hwnd=WinWait("MapleStory")
 	$hwndpos = WinGetPos("MapleStory")
 	$iLeft = $hwndpos[0]
 	$iTop = $hwndpos[1]
@@ -374,11 +381,11 @@ Func commands()
 	Sleep(5500)
 	ClipPut($clipstorage)
 EndFunc   ;==>commands
-Func partyinvite()
+Func partyinvite($MapleHImage)
 	_GDIPlus_Startup()
 	Local $hImage = _GDIPlus_ImageLoadFromFile(@TempDir & "\BetaLeaf Software\JustAsk\partyaccept.png")
 	Local $hHBmp = _GDIPlus_BitmapCreateHBITMAPFromBitmap($hImage)
-	Local $iRet = _ImageSearchArea($hHBmp, 1, $iLeft, $iTop, $iRight, $iBottom, $iX, $iY, 5, 0)
+	Local $iRet = _ImageSearchArea($hHBmp, 1, $iLeft, $iTop, $iRight, $iBottom, $iX, $iY, 5, $MapleHImage)
 	_WinAPI_DeleteObject($hHBmp)
 	_GDIPlus_ImageDispose($hImage)
 	_GDIPlus_Shutdown()
