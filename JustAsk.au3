@@ -2,7 +2,6 @@
 #Region ;**** Directives created by AutoIt3Wrapper_GUI ****
 #AutoIt3Wrapper_Icon=Includes\Icon.ico
 #AutoIt3Wrapper_Compression=4
-#AutoIt3Wrapper_UseUpx=y
 #AutoIt3Wrapper_Res_Fileversion=1.0.0.0
 #EndRegion ;**** Directives created by AutoIt3Wrapper_GUI ****
 #include-once
@@ -382,14 +381,16 @@ Func commands()
 	ClipPut($clipstorage)
 EndFunc   ;==>commands
 Func partyinvite($MapleHImage)
+	ConsoleWrite("Called!"&@crlf)
 	_GDIPlus_Startup()
 	Local $hImage = _GDIPlus_ImageLoadFromFile(@TempDir & "\BetaLeaf Software\JustAsk\partyaccept.png")
 	Local $hHBmp = _GDIPlus_BitmapCreateHBITMAPFromBitmap($hImage)
-	Local $iRet = _ImageSearchArea($hHBmp, 1, $iLeft, $iTop, $iRight, $iBottom, $iX, $iY, 5, $MapleHImage)
+	Local $iRet = _ImageSearchArea($hHBmp, 1, $iLeft, $iTop, $iRight, $iBottom, $iX, $iY, 25, $MapleHImage)
 	_WinAPI_DeleteObject($hHBmp)
 	_GDIPlus_ImageDispose($hImage)
 	_GDIPlus_Shutdown()
 	If $iRet = 1 Then
+		ConsoleWrite("Found Invite!"&@crlf)
 		WinActivate("MapleStory")
 		MouseClick("Left", $iX, $iY, 1, 0)
 	EndIf
